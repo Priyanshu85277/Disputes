@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Login</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 360px;
+            padding: 0 20px;
+        }
+
+        .zoom-logo {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .zoom-logo img {
+            width: 120px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #E3E3E3;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+            color: #232333;
+        }
+
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder {
+            color: #747487;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #0E72ED;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .forgot-link {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #0E72ED;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .sign-in-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #0E72ED;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 8px 0 16px 0;
+        }
+
+        .keep-signed {
+            display: flex;
+            align-items: center;
+            margin-bottom: 32px;
+            color: #232333;
+            font-size: 14px;
+        }
+
+        .keep-signed input[type="checkbox"] {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="zoom-logo">
+            <img src="logo.jpg" alt="Zoom" style="object-fit: contain;">
+        </div>
+        
+        <form>
+            <input type="email" placeholder="Email" required>
+            
+            <div class="password-container">
+                <input type="password" placeholder="Create Password" required>
+                <a href="#" class="forgot-link">Forgot?</a>
+            </div>
+            
+            <button type="submit" class="sign-in-btn">Sign UP</button>
+            
+            <div class="keep-signed">
+                <input type="checkbox" id="keep-signed">
+                <label for="keep-signed">Keep me signed in</label>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

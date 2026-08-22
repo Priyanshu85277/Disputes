@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+            --gradient-3: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%);
+            --gradient-4: linear-gradient(135deg, #5ee7df 0%, #b490ca 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .block {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .block-title {
+            padding: 15px 20px;
+            color: white;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .block-content {
+            padding: 20px;
+        }
+
+        /* Gradient backgrounds for different blocks */
+        .meeting-info-block .block-title {
+            background: var(--gradient-1);
+        }
+
+        .video-block .block-title {
+            background: var(--gradient-2);
+        }
+
+        .participants-block .block-title {
+            background: var(--gradient-3);
+        }
+
+        .insights-block .block-title {
+            background: var(--gradient-4);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 55% 45%;
+            gap: 20px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .video-cell {
+            background: #f0f0f0;
+            border-radius: 8px;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .video-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .control-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative; /* For positioning the tooltip */
+        }
+
+        .control-button::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -30px; /* Positioning below the button */
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #555;
+            background: #fff;
+            padding: 3px 8px;
+            border-radius: 5px;
+            visibility: hidden; /* Initially hidden */
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out; /* Smooth transition */
+        }
+
+        .control-button:hover::after {
+            visibility: visible;
+            opacity: 1; /* Show the tooltip */
+        }
+
+        .participant {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .participant-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            background: #ddd;
+            border-radius: 50%;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .chart {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        @media (max-width: 1024px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .block-title {
+                padding: 10px 15px;
+            }
+
+            .block-content {
+                padding: 15px;
+            }
+        }
+
+        /* Additional Styles for Share and Export Buttons */
+        .block-title .action-buttons {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-button {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: black;
+            position: relative;
+        }
+
+        .action-button i {
+            font-size: 18px;
+        }
+
+        /* Styling for Tooltip on Hover */
+        .action-button::after {
+            content: attr(data-name);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: #555;
+            background: #fff;
+            padding: 3px 8px;
+            border-radius: 5px;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
+        }
+
+        .action-button:hover::after {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Styling for the Agenda Date and Time */
+        .agenda-date {
+            font-size: 0.9em;
+            color: #777;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .agenda-date i {
+            font-size: 1.2em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <!-- Meeting Info Block -->
+    <div class="block meeting-info-block">
+        <div class="block-title">
+            <i class="fas fa-calendar-alt"></i>
+            Meeting Information
+            <div class="action-buttons">
+                <button class="action-button" aria-label="Share" data-name="Share">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="action-button" aria-label="Export" data-name="Export">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+        <div class="block-content">
+            <h2>Agenda - Week 01</h2>
+            <div class="agenda-date">
+                <i class="fas fa-calendar-day"></i>
+                <span>Mon, January 20, 2024</span>
+                <i class="fas fa-clock"></i>
+                <span>3:00PM - 4:00PM</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-container">
+        <!-- Video Block -->
+        <div class="block video-block">
+            <div class="block-title">
+                <i class="fas fa-video"></i>
+                Video Conference
+            </div>
+            <div class="block-content">
+                <div class="video-grid">
+                    <div class="video-cell">
+                        <img src="https://via.placeholder.com/400x225" alt="Participant 1">
+                    </div>
+                    <div class="video-cell">
+                        <img src="https://via.placeholder.com/400x225" alt="Participant 2">
+                    </div>
+                    <div class="video-cell">
+                        <img src="https://via.placeholder.com/400x225" alt="Participant 3">
+                    </div>
+                    <div class="video-cell">
+                        <img src="https://via.placeholder.com/400x225" alt="Participant 4">
+                    </div>
+                </div>
+                <div class="controls">
+                    <button class="control-button" data-name="Microphone">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="control-button" data-name="Video">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="control-button" data-name="Rewind">
+                        <i class="fas fa-backward"></i>
+                    </button>
+                    <button class="control-button" data-name="Play">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="control-button" data-name="Forward">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                    <button class="control-button" data-name="Analytics">
+                        <i class="fas fa-chart-bar"></i>
+                    </button>
+                    <button class="control-button" data-name="Chat">
+                        <i class="fas fa-comment"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+            <!-- Participants Block -->
+            <div class="block participants-block">
+                <div class="block-title">
+                    <i class="fas fa-users"></i>
+                    Participants
+                </div>
+                <div class="block-content">
+                    <div class="participant">
+                        <div class="participant-info">
+                            <div class="avatar"></div>
+                            <div>
+                                <strong>John Doe</strong>
+                                <div>Organizer</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar"></div>
+                    </div>
+                    <div class="participant">
+                        <div class="participant-info">
+                            <div class="avatar"></div>
+                            <div>
+                                <strong>Jane Smith</strong>
+                                <div>Participant</div>
+                            </div>
+                        </div>
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights Block -->
+            <div class="block insights-block">
+                <div class="block-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Key Insights
+                </div>
+                <div class="block-content">
+                    <div class="charts">
+                        <div class="chart">
+                            <!-- Pie Chart SVG -->
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" fill="transparent" stroke="#ddd" stroke-width="10"/>
+                                <path d="M50 50 L95 50 A45 45 0 0 1 75 90 Z" fill="#4CAF50"/>
+                                <path d="M50 50 L75 90 A45 45 0 0 1 25 90 Z" fill="#2196F3"/>
+                                <path d="M50 50 L25 90 A45 45 0 0 1 5 50 Z" fill="#FFC107"/>
+                                <path d="M50 50 L5 50 A45 45 0 0 1 25 10 Z" fill="#FF5722"/>
+                            </svg>
+                        </div>
+                        <div class="chart">
+                            <!-- Bar Chart SVG -->
+                            <svg viewBox="0 0 100 100">
+                                <rect x="10" y="20" width="20" height="60" fill="#4CAF50"/>
+                                <rect x="40" y="40" width="20" height="40" fill="#2196F3"/>
+                                <rect x="70" y="30" width="20" height="50" fill="#FFC107"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
