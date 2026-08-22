@@ -1,0 +1,15 @@
+@"
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pt
+*.pth
+
+static/uploads/
+static/predictions/
+static/images/
+.claude/
+"@ | Add-Content .gitignore
